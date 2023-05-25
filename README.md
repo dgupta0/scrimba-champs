@@ -1,2 +1,2 @@
 # scrimba-champs
-A solo project by Scrimba. 
+Scrimba Endoresements solo project. 
