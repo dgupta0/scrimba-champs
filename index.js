@@ -1,7 +1,5 @@
-console.log("start...");
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
-
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
     databaseURL: "https://scrimba-firebase-ca86b-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -26,22 +24,25 @@ onValue(postsInDB, function (snapshot) {
     parentEl.innerHTML = ""
     let postsArr = snapshot.val()
     for (let props in postsArr) {
-        createPostList(postsArr[props])
+        createPostList(postsArr[props], props)
     }
 })
 
-function createPostList(input) {
+function createPostList(input, id) {
     let childEl = document.createElement("p")
+    childEl.setAttribute("id", id)
     childEl.classList.add("postList")
     childEl.innerText = input
     parentEl.appendChild(childEl)
 }
 
-
+// Remove element from firebase and UI
 parentEl.addEventListener("dblclick", function (e) {
     for (let post of postList) {
-        if (e.target.innerText === post.innerText) {
-            parentEl.removeChild(post)
+        if (e.target.id === post.id) {
+            let itemToRemove = ref(database, `posts/${post.id}`)
+            remove(itemToRemove)
+            // parentEl.removeChild(post)
         }
     }
 })
@@ -56,5 +57,5 @@ parentEl.addEventListener("dblclick", function (e) {
 
 
 
-//console.log(inputEl.value)
+
 
